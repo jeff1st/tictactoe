@@ -1,21 +1,24 @@
 require './board'
 require './players'
+require './game_check'
 
 class Game
+  include Gamerules
 
   def initialize
     @player_one = ""
     @player_two = ""
-    @board = Board.new
+    @count = 0
     talkToPlayer("start")
   end
 
-  def loop
-    winner = "none"
-    count = 1
+  def mainLoop
+    @board = Board.new
+    endgame = "none"
 
-    while winner == "none"
-      player = whichPlayer(count)
+    while endgame == "none"
+      @count += 1
+      player = whichPlayer(@count)
       puts "\n"
       puts "#{player.name}, it's your turn"
       puts "Your choice?"
@@ -23,10 +26,12 @@ class Game
       @board.updateChoices
       @board.inGame
       tickBox(player)
-
-      count += 1
+      result = checkGrid(@board.core)
+      if result != " "
+        endgame = "true"
+      end
     end
-
+    endLoop(result, player)
   end
 
   def tickBox(player)
@@ -72,6 +77,16 @@ class Game
     number%2 != 0 ? (player = @player_one) : (player = @player_two)
     return player
   end
+  
+  def endLoop(result, player)
+    if result == "win"
+      puts "#{player.name} has won!"
+      player.score += 1
+      talkToPlayer("win")
+    else
+      talkToPlayer("draw")
+    end
+  end
 
   def talkToPlayer(state)
     if state == "start"
@@ -99,9 +114,25 @@ class Game
       puts "\n"
       puts "Welcome players: #{@player_one.name} and #{@player_two.name}!"
       puts "\n"
-      loop
+      mainLoop
+    elsif state == "win"
+      puts "\n"
+      puts "End of round"
+      puts "\n"
+      puts "Scores are: "
+      puts "#{@player_one.name}: #{@player_one.score} vs #{@player_two.name}: #{@player_two.score}"
+      puts "Play again?"
+      mainLoop
     else
-      puts "end"
+      puts "\n"
+      puts "This is a draw!"
+      puts "\n"
+      puts "End of round"
+      puts "\n"
+      puts "Scores are: "
+      puts "#{@player_one.name}: #{@player_one.score} vs #{@player_two.name}: #{@player_two.score}"
+      puts "Play again?"
+      mainLoop
     end
   end
 end

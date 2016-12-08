@@ -23,7 +23,7 @@ class Board
 
   def updateChoices
     (0...@rows).each do |i|
-      (0..@columns).each do |j|
+      (0...@columns).each do |j|
         @choices[i][j] = " " if @core[i][j] != " "
       end
     end
