@@ -7,56 +7,37 @@ module Gamerules
 
   def isDraw?(board)
     (0...3).each do |i|
-      if board[i].any? { |elt| elt == " " }
-        return false
-      end
+      return false if board[i].any? { |elt| elt == " " }
     end
-    if !isWinner?(board)
-      return true
-    end
+
+    return true if !isWinner?(board)
   end
 
   def isWinner?(board)
     if board[0][0] != " "
-      if (board[0][0] == board[0][1]) && (board[0][1] == board[0][2])
-        return true
-      end
-      if (board[0][0] == board[1][1]) && (board[1][1] == board[2][2])
-        return true
-      end
+      return true if (board[0][0] == board[0][1]) && (board[0][1] == board[0][2])
+      return true if (board[0][0] == board[1][1]) && (board[1][1] == board[2][2])
     end
 
     if board[1][0] != " "
-      if (board[1][0] == board[1][1]) && (board[1][1] == board[1][2])
-        return true
-      end
+      return true if (board[1][0] == board[1][1]) && (board[1][1] == board[1][2])
     end
     
     if board[2][0] != " "
-      if (board[2][0] == board[2][1]) && (board[2][1] == board[2][2])
-        return true
-      end
-      if (board[2][0] == board[1][1]) && (board[1][1] == board[0][2])
-        return true
-      end
+      return true if (board[2][0] == board[2][1]) && (board[2][1] == board[2][2])
+      return true if (board[2][0] == board[1][1]) && (board[1][1] == board[0][2])
     end
 
     if board[0][0] != " "
-      if (board[0][0] == board[1][0]) && (board[1][0] == board[2][0])
-        return true
-      end
+      return true if (board[0][0] == board[1][0]) && (board[1][0] == board[2][0])
     end
 
     if board[0][1] != " "
-      if (board[0][1] == board[1][1]) && (board[1][1] == board[2][1])
-        return true
-      end
+      return true if (board[0][1] == board[1][1]) && (board[1][1] == board[2][1])
     end
 
     if board[0][2] != " "
-      if (board[0][2] == board[1][2]) && (board[1][2] == board[2][2])
-        return true
-      end
+      return true if (board[0][2] == board[1][2]) && (board[1][2] == board[2][2])
     end
 
     return false

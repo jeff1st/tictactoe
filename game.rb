@@ -12,6 +12,8 @@ class Game
     talkToPlayer("start")
   end
 
+  private
+
   def mainLoop
     @board = Board.new
     endgame = "none"
@@ -20,17 +22,17 @@ class Game
       @count += 1
       player = whichPlayer(@count)
       puts "\n"
-      puts "#{player.name}, it's your turn"
-      puts "Your choice?"
+      puts "#{player.name}, it's your turn".center(50)
+      puts "Your choice?".center(50)
       puts "\n"
       @board.updateChoices
       @board.inGame
       tickBox(player)
       result = checkGrid(@board.core)
-      if result != " "
-        endgame = "true"
-      end
+
+      endgame = "true" if result != " "
     end
+
     endLoop(result, player)
   end
 
@@ -40,9 +42,7 @@ class Game
     while validate == false
       choice = gets.chomp
       if choice =~ /^[1-9]$/
-        (0...3).each do |i|
-          validate = true if @board.choices[i].include?(choice.to_i)
-        end
+        (0...3).each { |i| validate = true if @board.choices[i].include?(choice.to_i) }
         puts "Already chosen!" if !validate
       else
         puts "Wrong choice! You need to choose a number between 1 and 9"
@@ -80,7 +80,7 @@ class Game
   
   def endLoop(result, player)
     if result == "win"
-      puts "#{player.name} has won!"
+      puts "#{player.name} has won!".center(50)
       player.score += 1
       talkToPlayer("win")
     else
@@ -91,18 +91,19 @@ class Game
   def talkToPlayer(state)
     if state == "start"
       validate = false
-      puts "Welcome to my Game!"
+      puts "Welcome to my Game!".center(100)
       puts "\n"
       while !validate
-        puts "please, player one, enter your name: "
+        puts "\n"
+        puts "please, player one, enter your name: ".center(50)
         po = gets.chomp
         puts "\n"
-        puts "please, player two, enter your name: "
+        puts "please, player two, enter your name: ".center(50)
         pt = gets.chomp
         puts "\n"
 
-        puts "player one: #{po}"
-        puts "player two: #{pt}"
+        puts "player one: #{po}".center(50)
+        puts "player two: #{pt}".center(50)
         puts "\n"
         puts "Is that correct? (y/n)"
         puts "\n"
@@ -112,27 +113,41 @@ class Game
       @player_one = Players.new(po, "X")
       @player_two = Players.new(pt, "O")
       puts "\n"
-      puts "Welcome players: #{@player_one.name} and #{@player_two.name}!"
+      puts "Welcome players: #{@player_one.name} and #{@player_two.name}!".center(100)
       puts "\n"
       mainLoop
+
     elsif state == "win"
+      validate = false
       puts "\n"
-      puts "End of round"
+      puts "End of round".center(100)
       puts "\n"
-      puts "Scores are: "
-      puts "#{@player_one.name}: #{@player_one.score} vs #{@player_two.name}: #{@player_two.score}"
-      puts "Play again?"
-      mainLoop
+      puts "Scores are: ".center(100)
+      puts "#{@player_one.name}: #{@player_one.score} vs #{@player_two.name}: #{@player_two.score}".center(100)
+      while validate == false
+        puts "\n"
+        puts "Play again? (y/n)".center(100)
+        answer = gets.chomp
+        (validate = true; mainLoop) if answer == "y"
+        (validate = true; exit(0)) if answer == "n"
+      end
+
     else
+      validate = false
       puts "\n"
-      puts "This is a draw!"
+      puts "This is a draw!".center(100)
       puts "\n"
-      puts "End of round"
+      puts "End of round".center(100)
       puts "\n"
-      puts "Scores are: "
-      puts "#{@player_one.name}: #{@player_one.score} vs #{@player_two.name}: #{@player_two.score}"
-      puts "Play again?"
-      mainLoop
+      puts "Scores are: ".center(100)
+      puts "#{@player_one.name}: #{@player_one.score} vs #{@player_two.name}: #{@player_two.score}".center(100)
+      while validate == false
+        puts "\n"
+        puts "Play again? (y/n)".center(100)
+        answer = gets.chomp
+        (validate = true; mainLoop) if answer == "y"
+        (validate = true; exit(0)) if answer == "n"
+      end
     end
   end
 end
