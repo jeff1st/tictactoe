@@ -151,3 +151,5 @@ class Game
     end
   end
 end
+
+game = Game.new()
